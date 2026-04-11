@@ -1,0 +1,1 @@
+<template><div class="bg-light" style="min-width:200px; min-height:100vh">Sidebar</div></template>

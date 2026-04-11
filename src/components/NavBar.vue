@@ -1,0 +1,1 @@
+<template><nav class="navbar navbar-dark bg-dark px-4">Bozzvics HR</nav></template>
