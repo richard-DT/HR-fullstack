@@ -35,6 +35,11 @@ const router = createRouter({
       component: () => import('@/views/ThirteenthMonthView.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/ytd/:employeeId/:year',
+      component: () => import('@/views/YTDAttendanceView.vue'),
+      meta: { requiresAuth: true }
+    },
   ]
 })
 

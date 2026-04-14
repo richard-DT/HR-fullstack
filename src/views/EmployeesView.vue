@@ -48,8 +48,14 @@
                 </button>
                 <!-- Sa actions column ng table -->
                 <RouterLink
-                  :to="`/13thmonth/${emp._id}/2026`"
-                  class="btn btn-sm btn-outline-warning"
+                  :to="`/ytd/${emp._id}/${currentYear}`"
+                  class="btn btn-sm btn-outline-info me-1"
+                >
+                  📅 YTD
+                </RouterLink>
+                <RouterLink
+                  :to="`/13thmonth/${emp._id}/${currentYear}`"
+                  class="btn btn-sm btn-outline-warning me-1"
                 >
                   🎄 13th
                 </RouterLink>
@@ -218,6 +224,7 @@ const employeeStore = useEmployeeStore()
 const addModalRef        = ref(null)
 const salaryModalRef     = ref(null)
 const createUserModalRef = ref(null)
+const currentYear = new Date().getFullYear()
 
 let addModal        = null
 let salaryModal     = null

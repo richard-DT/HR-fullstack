@@ -38,6 +38,24 @@
         </RouterLink>
 
         <RouterLink
+          :to="`/ytd/${authStore.user.employee._id}/${currentYear}`"
+          class="sidebar-link"
+          :class="{ active: route.path.includes('/ytd') }"
+          @click="emit('closeSidebar')"
+        >
+          📅 My Attendance
+        </RouterLink>
+
+        <RouterLink
+          :to="`/13thmonth/${authStore.user.employee._id}/${currentYear}`"
+          class="sidebar-link"
+          :class="{ active: route.path.includes('/13thmonth') }"
+          @click="emit('closeSidebar')"
+        >
+          🎄 13th Month
+        </RouterLink>
+
+        <RouterLink
           :to="`/loans/${authStore.user.employee._id}`"
           class="sidebar-link"
           :class="{ active: route.path.includes('/loans') }"
@@ -77,6 +95,7 @@ import { useRoute } from 'vue-router'
 const authStore = useAuthStore()
 const route     = useRoute()
 const emit      = defineEmits(['closeSidebar'])
+const currentYear = new Date().getFullYear()
 </script>
 
 <style scoped>
