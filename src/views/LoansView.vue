@@ -201,7 +201,7 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-semibold">Payment Month</label>
+              <label class="form-label fw-semibold">Payment Date</label>
               <input v-model="paymentForm.month" type="date" class="form-control" />
             </div>
             <div class="mb-3">
