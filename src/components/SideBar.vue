@@ -45,6 +45,16 @@
         >
           💰 My Loans
         </RouterLink>
+
+        <RouterLink
+          to="/employees"
+          class="sidebar-link"
+          :class="{ active: route.path === '/employees' }"
+          @click="emit('closeSidebar')"
+        >
+          👥 Employees
+        </RouterLink>
+        
       </template>
     </nav>
 

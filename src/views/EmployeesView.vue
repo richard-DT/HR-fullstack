@@ -46,6 +46,13 @@
                 <button class="btn btn-sm btn-outline-danger" @click="openCreateUserModal(emp)">
                   👤 Account
                 </button>
+                <!-- Sa actions column ng table -->
+                <RouterLink
+                  :to="`/13thmonth/${emp._id}/2026`"
+                  class="btn btn-sm btn-outline-warning"
+                >
+                  🎄 13th
+                </RouterLink>
               </td>
             </tr>
             <tr v-if="employeeStore.employees.length === 0">

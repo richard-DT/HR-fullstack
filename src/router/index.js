@@ -30,6 +30,11 @@ const router = createRouter({
       component: () => import('@/views/LoansView.vue'),
       meta: { requiresAuth: true }
     },
+    {
+      path: '/13thmonth/:employeeId/:year',
+      component: () => import('@/views/ThirteenthMonthView.vue'),
+      meta: { requiresAuth: true }
+    },
   ]
 })
 
