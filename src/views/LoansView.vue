@@ -159,10 +159,10 @@
               <label class="form-label fw-semibold">Principal Amount (₱)</label>
               <input v-model.number="form.principalAmount" type="number" class="form-control" placeholder="e.g. 10000" />
             </div>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               <label class="form-label fw-semibold">Monthly Payment (₱)</label>
               <input v-model.number="form.monthlyPayment" type="number" class="form-control" placeholder="e.g. 1500" />
-            </div>
+            </div> -->
 
             <!-- Preview -->
             <div class="alert alert-secondary py-2 small" v-if="form.principalAmount && form.monthlyPayment">
