@@ -26,7 +26,7 @@
             <tr>
               <th>Date Taken</th>
               <th>Principal</th>
-              <th>Monthly Payment</th>
+              <!-- <th>Monthly Payment</th> -->
               <th>Balance</th>
               <th>Status</th>
               <th v-if="authStore.isAdmin">Actions</th>
@@ -36,7 +36,7 @@
             <tr v-for="loan in loanStore.loans" :key="loan._id">
               <td>{{ formatDate(loan.dateTaken) }}</td>
               <td>₱{{ loan.principalAmount.toLocaleString() }}</td>
-              <td>₱{{ loan.monthlyPayment.toLocaleString() }}</td>
+              <!-- <td>₱{ loan.monthlyPayment.toLocaleString() }}</td> -->
               <td class="fw-bold" :class="loan.balance > 0 ? 'text-danger' : 'text-success'">
                 ₱{{ loan.balance.toLocaleString() }}
               </td>
@@ -101,8 +101,8 @@
 
             <div class="row text-center small mt-2">
               <div class="col-6 border-end">
-                <p class="text-muted mb-0">Monthly Payment</p>
-                <p class="fw-semibold mb-0">₱{{ loan.monthlyPayment.toLocaleString() }}</p>
+                <!-- <p class="text-muted mb-0">Monthly Payment</p>
+                <p class="fw-semibold mb-0">₱{ loan.monthlyPayment.toLocaleString() }}</p> -->
               </div>
               <div class="col-6">
                 <p class="text-muted mb-0">Remaining Balance</p>
@@ -196,8 +196,8 @@
             <div class="alert alert-secondary py-2 small mb-3">
               <strong>Current Balance:</strong>
               ₱{{ selectedLoan.balance.toLocaleString() }}<br/>
-              <strong>Monthly Payment:</strong>
-              ₱{{ selectedLoan.monthlyPayment.toLocaleString() }}
+              <!-- <strong>Monthly Payment:</strong>
+              ₱{ selectedLoan.monthlyPayment.toLocaleString() }} -->
             </div>
 
             <div class="mb-3">
