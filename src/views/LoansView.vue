@@ -294,7 +294,7 @@ let addModal     = null
 let paymentModal = null
 let historyModal = null
 
-const form        = ref({ dateTaken: '', principalAmount: null, monthlyPayment: null })
+const form        = ref({ dateTaken: '', principalAmount: null})
 const paymentForm = ref({ month: '', amountPaid: null })
 const saving      = ref(false)
 const formError   = ref(null)
@@ -321,14 +321,14 @@ onMounted(async () => {
 
 const openAddModal = () => {
   formError.value = null
-  form.value      = { dateTaken: '', principalAmount: null, monthlyPayment: null }
+  form.value      = { dateTaken: '', principalAmount: null }
   addModal.show()
 }
 
 const openPaymentModal = (loan) => {
   formError.value  = null
   selectedLoan.value = loan
-  paymentForm.value  = { month: '', amountPaid: loan.monthlyPayment }
+  paymentForm.value  = { month: '', amountPaid: null }
   paymentModal.show()
 }
 
@@ -339,7 +339,7 @@ const openHistoryModal = (loan) => {
 
 const handleAddLoan = async () => {
   formError.value = null
-  if (!form.value.dateTaken || !form.value.principalAmount || !form.value.monthlyPayment) {
+  if (!form.value.dateTaken || !form.value.principalAmount) {
     formError.value = 'All fields are required.'
     return
   }
