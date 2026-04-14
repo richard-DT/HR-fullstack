@@ -165,11 +165,11 @@
             </div> -->
 
             <!-- Preview -->
-            <div class="alert alert-secondary py-2 small" v-if="form.principalAmount && form.monthlyPayment">
+            <!-- <div class="alert alert-secondary py-2 small" v-if="form.principalAmount && form.monthlyPayment">
               <strong>Preview:</strong><br/>
               Estimated months to settle:
-              {{ Math.ceil(form.principalAmount / form.monthlyPayment) }} months
-            </div>
+              { Math.ceil(form.principalAmount / form.monthlyPayment) }} months
+            </div> -->
           </div>
           <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
