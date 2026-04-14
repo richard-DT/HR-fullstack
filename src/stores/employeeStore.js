@@ -7,6 +7,7 @@ export const useEmployeeStore = defineStore('employee', () => {
   const employee  = ref(null)
   const loading   = ref(false)
   const error     = ref(null)
+  const summary = ref(null)
 
   const fetchEmployees = async () => {
     loading.value = true
@@ -27,6 +28,18 @@ export const useEmployeeStore = defineStore('employee', () => {
       employee.value = res.data
     } catch (err) {
       error.value = err.response?.data?.message || 'Error fetching employee'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const fetchSummary = async (id) => {
+    loading.value = true
+    try {
+      const res    = await api.get(`/employees/${id}/summary`)
+      summary.value = res.data
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Error fetching summary'
     } finally {
       loading.value = false
     }
@@ -57,7 +70,7 @@ export const useEmployeeStore = defineStore('employee', () => {
 
   return {
     employees, employee, loading, error,
-    fetchEmployees, fetchEmployee,
+    fetchEmployees, fetchEmployee, fetchSummary,
     createEmployee, updateEmployee, updateSalary, deleteEmployee
   }
 })
