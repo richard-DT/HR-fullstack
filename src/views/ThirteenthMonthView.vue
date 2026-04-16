@@ -3,7 +3,10 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h4 class="fw-bold mb-0">📊 13th Month Pay</h4>
-        <small class="text-muted" v-if="data">{{ data.employee.name }} — {{ data.year }}</small>
+        <!-- Sa header section, palitan ang subtitle -->
+        <small class="text-muted" v-if="data?.employee">
+          {{ data.employee?.name || 'No Name' }} — {{ data.period || 'No Period' }}
+        </small>
       </div>
       <div class="d-flex gap-2">
         <button class="btn btn-outline-secondary btn-sm" @click="router.back()">
@@ -62,7 +65,7 @@
               <tr v-for="month in data.months" :key="month.month"
                 :class="!month.hasData ? 'table-light text-muted' : ''"
               >
-                <td class="fw-semibold">{{ month.monthName }}</td>
+                <td class="fw-semibold">{{ month.fullMonthName }}</td>
                 <td>{{ month.hasData ? month.presentDays : '—' }}</td>
                 <td>
                   <span v-if="month.hasData" :class="month.absentDays > 0 ? 'text-danger fw-bold' : ''">
