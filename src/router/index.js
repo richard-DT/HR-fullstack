@@ -4,7 +4,12 @@ import { useAuthStore } from '@/stores/authStore.js'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', redirect: '/login' },
+    // { path: '/', redirect: '/login' },
+    {
+      path: '/',
+      component: () => import('@/views/HomepageView.vue'),
+      meta: { guestOnly: true }  // hindi na mapupuntahan kapag logged in
+    },
     {
       path: '/login',
       component: () => import('@/views/LoginView.vue'),
