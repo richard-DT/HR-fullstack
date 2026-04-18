@@ -3,7 +3,7 @@
 
     <!-- Title -->
     <div class="title">
-      <h1>Welcome to HR Portal</h1>
+      <h1>Welcome to your HR Portal</h1>
       <p>Select your company to continue</p>
     </div>
 
@@ -11,11 +11,11 @@
     <div class="logo-wrapper">
       
       <div class="logo-card" @click="goToLogin('bozzvics')">
-        <img src="/bozzvicsLogo.png" alt="Bozzvics" />
+        <img :src="bozzvicsLogo" alt="Bozzvics" />
       </div>
 
       <div class="logo-card" @click="goToLogin('woodlands')">
-        <img src="/woodlandsLogo.png" alt="Woodlands" />
+        <img :src="woodlandsLogo" alt="Woodlands" />
       </div>
 
     </div>
@@ -24,7 +24,10 @@
 </template>
 
 <script setup>
+
 import { useRouter } from 'vue-router'
+import bozzvicsLogo from '@/assets/bozzvicsLogo.png'
+import woodlandsLogo from '@/assets/woodlandsLogo.png'
 
 const router = useRouter()
 
