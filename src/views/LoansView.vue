@@ -315,6 +315,7 @@ import { Modal } from 'bootstrap'
 import { useAuthStore } from '@/stores/authStore.js'
 import { useEmployeeStore } from '@/stores/employeeStore.js'
 import { useLoanStore } from '@/stores/loanStore.js'
+import Swal from 'sweetalert2'
 
 const route         = useRoute()
 const router        = useRouter()
@@ -422,12 +423,16 @@ const checkLoanLimit = () => {
   const monthlyPay = selectedEmployee.value.monthlyRate || 0
 
   if (totalLoanBalance.value > monthlyPay) {
-    limitModal.show()
+    Swal.fire({
+      icon: 'warning',
+      title: 'Warning',
+      text: 'You have exceeded the loan amount limit !!!',
+      confirmButtonText: 'Noted',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: true
+    })
   }
-}
-
-const closeLimitModal = () => {
-  limitModal.hide()
 }
 
 onMounted(async () => {
