@@ -280,6 +280,31 @@
       </div>
     </div>
 
+    <!-- Loan Limit Warning Modal -->
+    <div class="modal fade" id="limitModal" tabindex="-1" ref="limitModalRef">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title">⚠️ Warning</h5>
+          </div>
+
+          <div class="modal-body text-center">
+            <p class="fw-bold text-danger mb-0">
+              You have exceeded the loan amount limit !!!
+            </p>
+          </div>
+
+          <div class="modal-footer justify-content-center">
+            <button class="btn btn-dark" @click="closeLimitModal">
+              Noted
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -305,6 +330,9 @@ const addModalRef     = ref(null)
 const paymentModalRef = ref(null)
 const historyModalRef = ref(null)
 
+const limitModalRef = ref(null)
+let limitModal = null
+
 let addModal     = null
 let paymentModal = null
 let historyModal = null
@@ -324,15 +352,6 @@ const formatDate = (date) => {
     year: 'numeric', month: 'short', day: 'numeric'
   })
 }
-
-onMounted(async () => {
-  await employeeStore.fetchEmployee(employeeId)
-  selectedEmployee.value = employeeStore.employee
-  await loanStore.fetchLoans(employeeId)
-  addModal     = new Modal(addModalRef.value)
-  paymentModal = new Modal(paymentModalRef.value)
-  historyModal = new Modal(historyModalRef.value)
-})
 
 const openAddModal = () => {
   formError.value = null
@@ -396,5 +415,32 @@ const totalLoanBalance = computed(() =>
     .filter(l => !l.isSettled) // active loans only
     .reduce((sum, l) => sum + (l.balance || 0), 0)
 )
+
+const checkLoanLimit = () => {
+  if (!selectedEmployee.value) return
+
+  const monthlyPay = selectedEmployee.value.monthlyRate || 0
+
+  if (totalLoanBalance.value > monthlyPay) {
+    limitModal.show()
+  }
+}
+
+const closeLimitModal = () => {
+  limitModal.hide()
+}
+
+onMounted(async () => {
+  await employeeStore.fetchEmployee(employeeId)
+  selectedEmployee.value = employeeStore.employee
+  await loanStore.fetchLoans(employeeId)
+  addModal     = new Modal(addModalRef.value)
+  paymentModal = new Modal(paymentModalRef.value)
+  historyModal = new Modal(historyModalRef.value)
+
+  limitModal = new Modal(limitModalRef.value)
+
+  checkLoanLimit()
+})
 
 </script>
