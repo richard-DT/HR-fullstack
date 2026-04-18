@@ -187,10 +187,16 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header bg-dark text-white">
-            <h5 class="modal-title">Create Account — {{ selectedEmployee?.name }}</h5>
+            <!-- <h5 class="modal-title">Create Account — {{ selectedEmployee?.name }}</h5> -->
+            <h5 class="modal-title">
+              👤 Create / Reset Account — {{ selectedEmployee?.name }}
+            </h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
+            <div class="alert alert-info py-2 small mb-3">
+              💡 If the employee already has an account, this will reset their username and password.
+            </div>
             <div v-if="formError" class="alert alert-danger py-2">{{ formError }}</div>
             <div v-if="formSuccess" class="alert alert-success py-2">{{ formSuccess }}</div>
             <div class="mb-3">
@@ -198,7 +204,7 @@
               <input v-model="userForm.username" type="text" class="form-control" />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-semibold">Password</label>
+              <label class="form-label fw-semibold">New Password</label>
               <input v-model="userForm.password" type="password" class="form-control" />
             </div>
           </div>
