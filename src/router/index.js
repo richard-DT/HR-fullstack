@@ -44,19 +44,49 @@ const router = createRouter({
 })
 
 // Route guards
+// router.beforeEach((to, from, next) => {
+//   const authStore = useAuthStore()
+
+//   if (to.meta.requiresAuth && !authStore.isLoggedIn) {
+//     return next('/login')
+//   }
+
+//   if (to.meta.guestOnly && authStore.isLoggedIn) {
+//     return next('/dashboard')
+//   }
+
+//   if (to.meta.adminOnly && !authStore.isAdmin) {
+//     return next('/dashboard')
+//   }
+
+//   next()
+// })
+
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
 
-  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
+  const isLoggedIn = authStore.isLoggedIn
+  const isAdmin = authStore.isAdmin
+  const isEmployee = authStore.user?.role === 'employee'
+
+  // 1. Not logged in
+  if (to.meta.requiresAuth && !isLoggedIn) {
     return next('/login')
   }
 
-  if (to.meta.guestOnly && authStore.isLoggedIn) {
-    return next('/dashboard')
+  // 2. Guest only routes
+  if (to.meta.guestOnly && isLoggedIn) {
+    return next(isEmployee ? `/loans/${authStore.user.employee._id}` : '/dashboard')
   }
 
-  if (to.meta.adminOnly && !authStore.isAdmin) {
-    return next('/dashboard')
+  // 3. Admin-only routes
+  if (to.meta.adminOnly && !isAdmin) {
+    return next(isEmployee ? `/loans/${authStore.user.employee._id}` : '/dashboard')
+  }
+
+  // 4. 🚫 BLOCK EMPLOYEE FROM DASHBOARD (IMPORTANT FIX)
+  if (to.path === '/dashboard' && isEmployee) {
+    return next(`/loans/${authStore.user.employee._id}`)
   }
 
   next()

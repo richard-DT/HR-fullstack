@@ -63,6 +63,9 @@
                 <button class="btn btn-sm btn-outline-primary me-1" @click="openViewModal(week)">
                   👁️ View
                 </button>
+                <button class="btn btn-sm btn-outline-warning me-1" @click="openEditModal(week)" v-if="authStore.isAdmin">
+                  ✏️ Edit
+                </button>
                 <button class="btn btn-sm btn-outline-danger" @click="handleDelete(week._id)" v-if="authStore.isAdmin">
                   🗑️
                 </button>
@@ -114,6 +117,9 @@
               <button class="btn btn-sm btn-outline-primary flex-grow-1" @click="openViewModal(week)">
                 👁️ View Details
               </button>
+              <button class="btn btn-sm btn-outline-warning me-1" @click="openEditModal(week)" v-if="authStore.isAdmin">
+                ✏️ Edit
+              </button>
               <button
                 v-if="authStore.isAdmin"
                 class="btn btn-sm btn-outline-danger"
@@ -150,8 +156,8 @@
                     <th>Day</th>
                     <th>Date</th>
                     <th>Attendance</th>
-                    <th>Hours</th>
-                    <th>OT Hrs</th>
+                    <th v-if="authStore.isAdmin">Hours</th>
+                    <th v-if="authStore.isAdmin">OT Hrs</th>
                     <th>Daily Pay</th>
                     <th>OT Pay</th>
                     <th>Advances</th>
@@ -163,8 +169,8 @@
                     <td>{{ day.weekday }}</td>
                     <td>{{ day.dayNumber }}</td>
                     <td><span :class="attendanceBadge(day.attendance)">{{ day.attendance }}</span></td>
-                    <td>{{ day.hoursWorked ?? 8 }}</td>
-                    <td>{{ day.otHours ?? 0 }}</td>
+                    <td v-if="authStore.isAdmin">{{ day.hoursWorked ?? 8 }}</td>
+                    <td v-if="authStore.isAdmin">{{ day.otHours ?? 0 }}</td>
                     <td>₱{{ day.dailyPay.toLocaleString() }}</td>
                     <td>₱{{ day.overtime.toLocaleString() }}</td>
                     <td>₱{{ day.advances.toLocaleString() }}</td>
@@ -173,14 +179,14 @@
                 </tbody>
                 <tfoot class="table-light fw-bold">
                   <tr>
-                    <td colspan="5" class="text-end">Totals:</td>
+                    <td :colspan="authStore.isAdmin ? 5 : 3" class="text-end">Totals:</td>
                     <td>₱{{ selectedWeek.totalDailyPay.toLocaleString() }}</td>
                     <td>₱{{ selectedWeek.totalOvertime.toLocaleString() }}</td>
                     <td>₱{{ selectedWeek.totalAdvances.toLocaleString() }}</td>
                     <td></td>
                   </tr>
                   <tr>
-                    <td colspan="8" class="text-end text-success">Net Pay:</td>
+                    <td :colspan="authStore.isAdmin ? 8 : 6" class="text-end text-success">Net Pay:</td>
                     <td class="text-success">₱{{ selectedWeek.netPay.toLocaleString() }}</td>
                   </tr>
                 </tfoot>
@@ -212,8 +218,8 @@
                     </div>
                   </div>
                   <div class="row text-muted small mt-1" v-if="day.attendance !== 'absent' && day.attendance !== 'rest'">
-                    <div class="col-4">Hrs: {{ day.hoursWorked ?? 8 }}</div>
-                    <div class="col-4">OT: {{ day.otHours ?? 0 }}hrs</div>
+                    <!-- <div class="col-4">Hrs: { day.hoursWorked ?? 8 }}</div>
+                    <div class="col-4">OT: { day.otHours ?? 0 }}hrs</div> -->
                     <div class="col-4" v-if="day.remarks">📝 {{ day.remarks }}</div>
                   </div>
                 </div>
@@ -333,7 +339,7 @@
             <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <button class="btn btn-dark" :disabled="saving" @click="handleAddPayslip">
               <span v-if="saving" class="spinner-border spinner-border-sm me-1"></span>
-              {{ saving ? 'Saving...' : 'Save Payslip' }}
+              {{ saving ? 'Saving...' : (isEditMode ? 'Update Payslip' : 'Save Payslip') }}
             </button>
           </div>
         </div>
@@ -364,6 +370,9 @@ const viewModalRef     = ref(null)
 const addModalRef      = ref(null)
 const formError        = ref(null)
 const saving           = ref(false)
+
+const isEditMode = ref(false)
+const editingWeekId = ref(null)
 
 let viewModal = null
 let addModal  = null
@@ -420,21 +429,57 @@ const openViewModal = (week) => {
   viewModal.show()
 }
 
+// original
+// const openAddModal = () => {
+//   formError.value = null
+//   form.value      = { periodStart: '', periodEnd: '', days: [] }
+//   addModal.show()
+// }
+
 const openAddModal = () => {
   formError.value = null
-  form.value      = { periodStart: '', periodEnd: '', days: [] }
+  isEditMode.value = false
+  editingWeekId.value = null
+
+  form.value = { periodStart: '', periodEnd: '', days: [] }
   addModal.show()
 }
 
+// original
+// const handleAddPayslip = async () => {
+//   formError.value = null
+//   if (!form.value.periodStart || !form.value.periodEnd || !form.value.days.length) {
+//     formError.value = 'Please select a pay period.'
+//     return
+//   }
+//   saving.value = true
+//   try {
+//     await attendanceStore.createWeek(employeeId, form.value)
+//     addModal.hide()
+//   } catch (err) {
+//     formError.value = err.response?.data?.message || 'Error saving payslip.'
+//   } finally {
+//     saving.value = false
+//   }
+// }
+
 const handleAddPayslip = async () => {
   formError.value = null
+
   if (!form.value.periodStart || !form.value.periodEnd || !form.value.days.length) {
     formError.value = 'Please select a pay period.'
     return
   }
+
   saving.value = true
+
   try {
-    await attendanceStore.createWeek(employeeId, form.value)
+    if (isEditMode.value) {
+      await attendanceStore.updateWeek(editingWeekId.value, form.value)
+    } else {
+      await attendanceStore.createWeek(employeeId, form.value)
+    }
+
     addModal.hide()
   } catch (err) {
     formError.value = err.response?.data?.message || 'Error saving payslip.'
@@ -446,6 +491,21 @@ const handleAddPayslip = async () => {
 const handleDelete = async (weekId) => {
   if (!confirm('Delete this payslip?')) return
   await attendanceStore.deleteWeek(weekId)
+}
+
+const openEditModal = (week) => {
+  formError.value = null
+  isEditMode.value = true
+  editingWeekId.value = week._id
+
+  // deep clone so we don't mutate original table data
+  form.value = {
+    periodStart: week.periodStart?.slice(0, 10),
+    periodEnd: week.periodEnd?.slice(0, 10),
+    days: JSON.parse(JSON.stringify(week.days))
+  }
+
+  addModal.show()
 }
 
 onMounted(async () => {

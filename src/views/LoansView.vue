@@ -3,7 +3,22 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h4 class="fw-bold mb-0">💰 Loans</h4>
-        <small class="text-muted" v-if="selectedEmployee">{{ selectedEmployee.name }}</small>
+        <small class="text-muted d-block" v-if="selectedEmployee">
+          {{ selectedEmployee.name }}
+        </small>
+
+        <div class="mt-1" v-if="!loanStore.loading">
+          <span class="fw-semibold">Total Loan Balance: </span>
+          <span
+            class="fw-bold"
+            :class="totalLoanBalance > 0 ? 'text-danger' : 'text-success'"
+          >
+            ₱{{ totalLoanBalance.toLocaleString() }}
+          </span>
+          <div>
+            Active Loans: {{ loanStore.loans.filter(l => !l.isSettled).length }}
+          </div>
+        </div>
       </div>
       <div class="d-flex gap-2">
         <button class="btn btn-outline-secondary btn-sm" @click="router.back()">
@@ -375,4 +390,11 @@ const handleDelete = async (loanId) => {
   if (!confirm('Delete this loan?')) return
   await loanStore.deleteLoan(loanId)
 }
+
+const totalLoanBalance = computed(() =>
+  loanStore.loans
+    .filter(l => !l.isSettled) // active loans only
+    .reduce((sum, l) => sum + (l.balance || 0), 0)
+)
+
 </script>

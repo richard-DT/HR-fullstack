@@ -8,6 +8,7 @@
     <nav class="flex-grow-1 p-2">
       <!-- Main links -->
       <RouterLink
+        v-if="authStore.isAdmin"
         to="/dashboard"
         class="sidebar-link"
         :class="{ active: route.path === '/dashboard' && !employeeStore.summary }"
@@ -26,24 +27,7 @@
           👥 Employees
         </RouterLink>
 
-        <!-- Employee list -->
-        <div class="mt-2 mb-1 px-2">
-          <small class="text-secondary text-uppercase" style="font-size: 0.7rem">My Employees</small>
-        </div>
-
-        <div v-if="employeeStore.loading" class="text-center py-2">
-          <div class="spinner-border spinner-border-sm text-secondary"></div>
-        </div>
-
-        <button
-          v-for="emp in employeeStore.employees"
-          :key="emp._id"
-          class="sidebar-link text-start w-100 border-0 bg-transparent"
-          :class="{ active: employeeStore.summary?._id === emp._id }"
-          @click="selectEmployee(emp)"
-        >
-          👤 {{ emp.name }}
-        </button>
+        
       </template>
 
       <!-- Employee only links -->
@@ -72,7 +56,7 @@
           :class="{ active: route.path.includes('/13thmonth') }"
           @click="emit('closeSidebar')"
         >
-          🎄 13th Month
+          🏆 Performance Bonus
         </RouterLink>
 
         <RouterLink

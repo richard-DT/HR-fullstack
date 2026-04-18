@@ -101,16 +101,16 @@
                 <td>{{ month.hasData ? month.slDays : '—' }}</td>
                 <td>{{ month.hasData ? month.vlDays : '—' }}</td>
                 <td>{{ month.hasData ? month.restDays : '—' }}</td>
-                <td>{{ month.hasData ? month.totalWorkingDays : '—' }}</td>
+                <td>{{ month.hasData ? 26 : '—' }}</td>
                 <td>
                   <span v-if="month.hasData">
                     <div class="progress" style="height: 8px; min-width: 80px">
                       <div
                         class="progress-bar bg-success"
-                        :style="`width: ${month.totalWorkingDays > 0 ? (month.presentDays / month.totalWorkingDays * 100).toFixed(0) : 0}%`"
+                        :style="`width: ${month.totalWorkingDays > 0 ? (month.attendanceRate * 100).toFixed(0) : 0}%`"
                       ></div>
                     </div>
-                    <small>{{ month.totalWorkingDays > 0 ? (month.presentDays / month.totalWorkingDays * 100).toFixed(1) : 0 }}%</small>
+                    <small>{{ month.totalWorkingDays > 0 ? (month.attendanceRate * 100).toFixed(1) : 0 }}%</small>
                   </span>
                   <span v-else>—</span>
                 </td>
@@ -134,7 +134,13 @@
                       :style="`width: ${ytdSummary.workingDays > 0 ? (ytdSummary.present / ytdSummary.workingDays * 100).toFixed(0) : 0}%`"
                     ></div>
                   </div>
-                  <small>{{ ytdSummary.workingDays > 0 ? (ytdSummary.present / ytdSummary.workingDays * 100).toFixed(1) : 0 }}%</small>
+                  <small>
+                    {{
+                      ytdSummary.workingDays > 0
+                        ? (ytdSummary.present / ytdSummary.workingDays * 100).toFixed(1)
+                        : 0
+                    }}%
+                  </small>
                 </td>
               </tr>
             </tfoot>
@@ -154,7 +160,7 @@
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h6 class="fw-bold mb-0">{{ month.monthName }}</h6>
               <span v-if="month.hasData" class="small text-muted">
-                {{ month.totalWorkingDays > 0 ? (month.presentDays / month.totalWorkingDays * 100).toFixed(1) : 0 }}% attendance
+                {{ month.totalWorkingDays > 0 ? (month.attendanceRate * 100).toFixed(1) : 0 }}% attendance
               </span>
               <span v-else class="badge bg-secondary">No Data</span>
             </div>
@@ -164,7 +170,7 @@
               <div class="progress mb-2" style="height: 6px">
                 <div
                   class="progress-bar bg-success"
-                  :style="`width: ${month.totalWorkingDays > 0 ? (month.presentDays / month.totalWorkingDays * 100).toFixed(0) : 0}%`"
+                  :style="`width: ${month.totalWorkingDays > 0 ? (month.attendanceRate * 100).toFixed(0) : 0}%`"
                 ></div>
               </div>
 
@@ -284,7 +290,7 @@ const ytdSummary = computed(() => {
     acc.sl          += m.slDays
     acc.vl          += m.vlDays
     acc.rest        += m.restDays
-    acc.workingDays += m.totalWorkingDays
+    acc.workingDays += 26
     return acc
   }, { present: 0, absent: 0, ot: 0, partial: 0, sl: 0, vl: 0, rest: 0, workingDays: 0 })
 })

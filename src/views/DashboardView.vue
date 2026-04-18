@@ -25,7 +25,7 @@
           📅 YTD Attendance
         </RouterLink>
         <RouterLink :to="`/13thmonth/${employeeStore.summary._id}/${currentYear}`" class="btn btn-outline-warning btn-sm">
-          🎄 13th Month
+          🏆 Monthly Performance
         </RouterLink>
         <button class="btn btn-outline-primary btn-sm" @click="openSalaryModal">
           💵 Update Salary
@@ -65,7 +65,7 @@
         <div class="col-6 col-md-3">
           <div class="card bg-warning text-dark h-100">
             <div class="card-body">
-              <p class="small mb-1">YTD 13th Month</p>
+              <p class="small mb-1">Monthly Performance Bonus</p>
               <h5 class="fw-bold mb-0">₱{{ employeeStore.summary.ytd13thMonth.toLocaleString() }}</h5>
             </div>
           </div>
@@ -169,14 +169,14 @@
           </div>
         </div>
         <div class="col-6 col-md-3">
-          <div class="card text-white bg-warning h-100">
+          <div class="card text-white bg-info h-100">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <p class="mb-1 small text-white-50">YTD 13th Month</p>
+                  <p class="mb-1 small text-white-50">YTD Performance Bonus</p>
                   <h3 class="fw-bold mb-0">₱{{ totalYTD13th.toLocaleString() }}</h3>
                 </div>
-                <span style="font-size: 2rem">🎄</span>
+                <span style="font-size: 2rem">🏆</span>
               </div>
             </div>
           </div>
@@ -198,8 +198,8 @@
                 <th>Monthly Rate</th>
                 <th>Gross Monthly</th>
                 <th>Loan Balance</th>
-                <th>YTD 13th Month</th>
-                <th>Attendance %</th>
+                <th>YTD Performance Bonus</th>
+                <th>YTD Attendance %</th>
               </tr>
             </thead>
             <tbody>
@@ -266,7 +266,7 @@
                 </p>
               </div>
               <div class="col-4">
-                <p class="text-muted mb-0">13th Mo</p>
+                <p class="text-muted mb-0">Mo Bonus</p>
                 <p class="fw-semibold mb-0">₱{{ emp.ytd13thMonth?.toLocaleString() ?? '—' }}</p>
               </div>
             </div>

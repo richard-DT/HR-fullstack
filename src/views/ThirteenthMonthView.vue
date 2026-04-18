@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
-        <h4 class="fw-bold mb-0">📊 13th Month Pay</h4>
+        <h4 class="fw-bold mb-0">📊 Monthly Performance Bonus</h4>
         <!-- Sa header section, palitan ang subtitle -->
         <small class="text-muted" v-if="data?.employee">
           {{ data.employee?.name || 'No Name' }} — {{ data.period || 'No Period' }}
@@ -30,11 +30,11 @@
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col">
-              <p class="text-secondary mb-1 small">Year-to-Date 13th Month Pay</p>
+              <p class="text-secondary mb-1 small">Year-to-Date Monthly Performance Bonus</p>
               <h2 class="fw-bold mb-0">₱{{ data.ytdTotal.toLocaleString('en-PH', { minimumFractionDigits: 2 }) }}</h2>
             </div>
             <div class="col-auto">
-              <span style="font-size: 3rem">🎄</span>
+              <span style="font-size: 3rem">🏆</span>
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@
                 <th>VL</th>
                 <th>Working Days</th>
                 <th>Monthly Rate</th>
-                <th>13th Month Share</th>
+                <th>Monthly Performance Bonus</th>
                 <th v-if="authStore.isAdmin">Status</th>
               </tr>
             </thead>
@@ -76,10 +76,10 @@
                 <td>{{ month.hasData ? month.otDays : '—' }}</td>
                 <td>{{ month.hasData ? month.slDays : '—' }}</td>
                 <td>{{ month.hasData ? month.vlDays : '—' }}</td>
-                <td>{{ month.hasData ? month.totalWorkingDays : '—' }}</td>
+                <td>{{ month.hasData ? 26 : '—' }}</td>
                 <td>{{ month.hasData ? `₱${month.monthlyRate.toLocaleString()}` : '—' }}</td>
                 <td class="fw-bold" :class="month.share > 0 ? 'text-success' : ''">
-                  {{ month.hasData ? `₱${month.share.toLocaleString('en-PH', { minimumFractionDigits: 2 })}` : '—' }}
+                  {{ month.hasData ? `₱${month.share.toLocaleString('en-PH', { minimumFractionDigits: 2 })}` : '—' }} 
                 </td>
                 <td v-if="authStore.isAdmin">
                   <span v-if="!month.hasData" class="badge bg-secondary">No Data</span>
