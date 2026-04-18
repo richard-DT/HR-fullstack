@@ -309,7 +309,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { watch, ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Modal } from 'bootstrap'
 import { useAuthStore } from '@/stores/authStore.js'
@@ -417,23 +417,47 @@ const totalLoanBalance = computed(() =>
     .reduce((sum, l) => sum + (l.balance || 0), 0)
 )
 
-const checkLoanLimit = () => {
-  if (!selectedEmployee.value) return
+// const checkLoanLimit = () => {
+//   if (!selectedEmployee.value) return
 
-  const monthlyPay = selectedEmployee.value.monthlyRate || 0
+//   const monthlyPay = selectedEmployee.value.monthlyRate || 0
 
-  if (totalLoanBalance.value > monthlyPay) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Warning',
-      text: 'You have exceeded the loan amount limit !!!',
-      confirmButtonText: 'Noted',
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      allowEnterKey: true
-    })
-  }
-}
+//   if (totalLoanBalance.value > monthlyPay) {
+//     Swal.fire({
+//       icon: 'warning',
+//       title: 'Warning',
+//       text: 'You have exceeded the loan amount limit !!!',
+//       confirmButtonText: 'Noted',
+//       allowOutsideClick: false,
+//       allowEscapeKey: false,
+//       allowEnterKey: true
+//     })
+//   }
+// }
+
+let alertShown = false
+
+watch(
+  [totalLoanBalance, selectedEmployee],
+  ([balance, employee]) => {
+    if (!employee || alertShown) return
+
+    const monthlyPay = employee.monthlyRate || 0
+
+    if (balance > monthlyPay) {
+      alertShown = true
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Warning',
+        text: 'You have exceeded the loan amount limit !!!',
+        confirmButtonText: 'Noted',
+        allowOutsideClick: false
+      })
+    }
+  },
+  { immediate: true }
+)
 
 onMounted(async () => {
   await employeeStore.fetchEmployee(employeeId)
@@ -443,9 +467,6 @@ onMounted(async () => {
   paymentModal = new Modal(paymentModalRef.value)
   historyModal = new Modal(historyModalRef.value)
 
-  limitModal = new Modal(limitModalRef.value)
-
-  checkLoanLimit()
 })
 
 </script>
