@@ -197,8 +197,8 @@ const fetchData = async () => {
 }
 
 onMounted(() => {
-  console.log('employeeId:', employeeId)
-  console.log('year:', selectedYear.value)
+  // console.log('employeeId:', employeeId)
+  // console.log('year:', selectedYear.value)
   fetchData()
 })
 

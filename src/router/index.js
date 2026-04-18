@@ -43,26 +43,38 @@ const router = createRouter({
   ]
 })
 
-// Route guards
+
 // router.beforeEach((to, from, next) => {
 //   const authStore = useAuthStore()
 
-//   if (to.meta.requiresAuth && !authStore.isLoggedIn) {
+//   const isLoggedIn = authStore.isLoggedIn
+//   const isAdmin = authStore.isAdmin
+//   const isEmployee = authStore.user?.role === 'employee'
+
+//   // 1. Not logged in
+//   if (to.meta.requiresAuth && !isLoggedIn) {
 //     return next('/login')
 //   }
 
-//   if (to.meta.guestOnly && authStore.isLoggedIn) {
-//     return next('/dashboard')
+//   // 2. Guest only routes
+//   if (to.meta.guestOnly && isLoggedIn) {
+//     return next(isEmployee ? `/loans/${authStore.user.employee._id}` : '/dashboard')
 //   }
 
-//   if (to.meta.adminOnly && !authStore.isAdmin) {
-//     return next('/dashboard')
+//   // 3. Admin-only routes
+//   if (to.meta.adminOnly && !isAdmin) {
+//     return next(isEmployee ? `/loans/${authStore.user.employee._id}` : '/dashboard')
+//   }
+
+//   // 4. 🚫 BLOCK EMPLOYEE FROM DASHBOARD (IMPORTANT FIX)
+//   if (to.path === '/dashboard' && isEmployee) {
+//     return next(`/loans/${authStore.user.employee._id}`)
 //   }
 
 //   next()
 // })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
   const authStore = useAuthStore()
 
   const isLoggedIn = authStore.isLoggedIn
@@ -71,25 +83,30 @@ router.beforeEach((to, from, next) => {
 
   // 1. Not logged in
   if (to.meta.requiresAuth && !isLoggedIn) {
-    return next('/login')
+    return '/login'
   }
 
   // 2. Guest only routes
   if (to.meta.guestOnly && isLoggedIn) {
-    return next(isEmployee ? `/loans/${authStore.user.employee._id}` : '/dashboard')
+    return isEmployee
+      ? `/loans/${authStore.user.employee._id}`
+      : '/dashboard'
   }
 
   // 3. Admin-only routes
   if (to.meta.adminOnly && !isAdmin) {
-    return next(isEmployee ? `/loans/${authStore.user.employee._id}` : '/dashboard')
+    return isEmployee
+      ? `/loans/${authStore.user.employee._id}`
+      : '/dashboard'
   }
 
-  // 4. 🚫 BLOCK EMPLOYEE FROM DASHBOARD (IMPORTANT FIX)
+  // 4. 🚫 BLOCK EMPLOYEE FROM DASHBOARD
   if (to.path === '/dashboard' && isEmployee) {
-    return next(`/loans/${authStore.user.employee._id}`)
+    return `/loans/${authStore.user.employee._id}`
   }
 
-  next()
+  // allow navigation
+  return true
 })
 
 export default router

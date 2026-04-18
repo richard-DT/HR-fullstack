@@ -218,12 +218,31 @@
                   ₱{{ emp.totalLoanBalance?.toLocaleString() ?? '—' }}
                 </td>
                 <td>₱{{ emp.ytd13thMonth?.toLocaleString() ?? '—' }}</td>
-                <td>
+                <!-- <td>
                   <span v-if="emp.attendanceRate !== undefined"
                     :class="emp.attendanceRate >= 90 ? 'badge bg-success' : 'badge bg-danger'"
                   >
                     {{ emp.attendanceRate }}%
                   </span>
+                  <span v-else class="text-muted">—</span>
+                </td> -->
+                <td>
+                  <div v-if="emp.attendanceRate !== undefined" class="d-flex align-items-center gap-2">
+                    
+                    <!-- Progress Bar -->
+                    <div class="progress w-100" style="height: 20px;">
+                      <div
+                        class="progress-bar"
+                        role="progressbar"
+                        :style="{ width: emp.attendanceRate + '%' }"
+                        :class="emp.attendanceRate >= 90 ? 'bg-success' : 'bg-danger'"
+                      >
+                        {{ emp.attendanceRate }}%
+                      </div>
+                    </div>
+
+                  </div>
+
                   <span v-else class="text-muted">—</span>
                 </td>
               </tr>
@@ -492,7 +511,7 @@ onMounted(async () => {
           ytdPresent += month.presentDays     // ← sum ng present days
         }
 
-        console.log(`FINAL: ytdPresent=${ytdPresent}, ytdWorkingDays=${ytdWorkingDays}, rate=${(ytdPresent/ytdWorkingDays*100).toFixed(1)}%`)
+        // console.log(`FINAL: ytdPresent=${ytdPresent}, ytdWorkingDays=${ytdWorkingDays}, rate=${(ytdPresent/ytdWorkingDays*100).toFixed(1)}%`)
 
         ytdWorkingDays = 26 * monthCount      // ← 26 × number of months
 
