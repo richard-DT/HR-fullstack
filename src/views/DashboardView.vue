@@ -447,21 +447,66 @@ const handleCreateUser = async () => {
   }
 }
 
+// onMounted(async () => {
+//   salaryModal     = new Modal(salaryModalRef.value)
+//   createUserModal = new Modal(createUserModalRef.value)
+
+//   if (authStore.isAdmin) {
+//     await employeeStore.fetchEmployees()
+//     // Fetch summaries for all employees
+//     summaries.value = await Promise.all(
+//       employeeStore.employees.map(async (emp) => {
+//         const res = await api.get(`/employees/${emp._id}/summary`)
+//         return res.data
+//       })
+//     )
+//   } else if (authStore.user?.employee) {
+//     await employeeStore.fetchEmployee(authStore.user.employee._id)
+//   }
+// })
+
 onMounted(async () => {
   salaryModal     = new Modal(salaryModalRef.value)
   createUserModal = new Modal(createUserModalRef.value)
 
   if (authStore.isAdmin) {
     await employeeStore.fetchEmployees()
-    // Fetch summaries for all employees
+
     summaries.value = await Promise.all(
       employeeStore.employees.map(async (emp) => {
         const res = await api.get(`/employees/${emp._id}/summary`)
-        return res.data
+        const data = res.data
+
+        // Re-compute attendance rate — same as YTDAttendanceView
+        const ytdRes = await api.get(`/employees/${emp._id}/13thmonth/${currentYear}`)
+        const months = ytdRes.data.months
+        const now    = new Date()
+        const BASE_DAYS = 26
+
+        let ytdPresent     = 0
+        let ytdWorkingDays = 0
+        let monthCount     = 0 
+
+        for (const month of months) {
+          monthCount++                        // ← count lahat ng months
+          ytdPresent += month.presentDays     // ← sum ng present days
+        }
+
+        console.log(`FINAL: ytdPresent=${ytdPresent}, ytdWorkingDays=${ytdWorkingDays}, rate=${(ytdPresent/ytdWorkingDays*100).toFixed(1)}%`)
+
+        ytdWorkingDays = 26 * monthCount      // ← 26 × number of months
+
+
+        const attendanceRate = ytdWorkingDays > 0
+          ? (ytdPresent / ytdWorkingDays * 100).toFixed(1)
+          : 0
+
+        return { ...data, attendanceRate }
       })
     )
   } else if (authStore.user?.employee) {
     await employeeStore.fetchEmployee(authStore.user.employee._id)
   }
 })
+
 </script>

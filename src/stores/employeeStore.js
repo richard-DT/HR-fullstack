@@ -33,11 +33,47 @@ export const useEmployeeStore = defineStore('employee', () => {
     }
   }
 
+  // const fetchSummary = async (id) => {
+  //   loading.value = true
+  //   try {
+  //     const res    = await api.get(`/employees/${id}/summary`)
+  //     summary.value = res.data
+  //   } catch (err) {
+  //     error.value = err.response?.data?.message || 'Error fetching summary'
+  //   } finally {
+  //     loading.value = false
+  //   }
+  // }
+
   const fetchSummary = async (id) => {
     loading.value = true
     try {
-      const res    = await api.get(`/employees/${id}/summary`)
-      summary.value = res.data
+      const [summaryRes, ytdRes] = await Promise.all([
+        api.get(`/employees/${id}/summary`),
+        api.get(`/employees/${id}/13thmonth/${new Date().getFullYear()}`),
+      ])
+
+      const data   = summaryRes.data
+      const months = ytdRes.data.months
+      const now    = new Date()
+      const BASE_DAYS = 26
+
+      let ytdPresent     = 0
+      let ytdWorkingDays = 0
+      let monthCount     = 0  // ← bagong counter
+
+      for (const month of months) {
+        monthCount++                        // ← count lahat ng months
+        ytdPresent += month.presentDays     // ← sum ng present days
+      }
+
+      ytdWorkingDays = 26 * monthCount      // ← 26 × number of months
+
+      const attendanceRate = ytdWorkingDays > 0
+        ? (ytdPresent / ytdWorkingDays * 100).toFixed(1)
+        : '0.0'
+
+      summary.value = { ...data, attendanceRate }
     } catch (err) {
       error.value = err.response?.data?.message || 'Error fetching summary'
     } finally {
@@ -69,7 +105,7 @@ export const useEmployeeStore = defineStore('employee', () => {
   }
 
   return {
-    employees, employee, loading, error,
+    employees, employee, loading, error, summary,
     fetchEmployees, fetchEmployee, fetchSummary,
     createEmployee, updateEmployee, updateSalary, deleteEmployee
   }

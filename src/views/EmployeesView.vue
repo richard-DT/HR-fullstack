@@ -59,6 +59,9 @@
                 >
                   🏆 Perf Bonus
                 </RouterLink>
+                <button class="btn btn-sm btn-outline-danger me-1" @click="handleDelete(emp._id, emp.name)">
+                  🗑️ Delete
+                </button>
               </td>
             </tr>
             <tr v-if="employeeStore.employees.length === 0">
@@ -331,4 +334,14 @@ const handleCreateUser = async () => {
     saving.value = false
   }
 }
+
+const handleDelete = async (id, name) => {
+  if (!confirm(`Are you sure you want to deactivate ${name}?`)) return
+  try {
+    await employeeStore.deleteEmployee(id)
+  } catch (err) {
+    alert(err.response?.data?.message || 'Error deleting employee.')
+  }
+}
+
 </script>
