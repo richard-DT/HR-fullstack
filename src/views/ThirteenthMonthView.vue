@@ -135,7 +135,7 @@
                 </div>
                 <div class="col-3">
                   <p class="text-muted mb-0">Working</p>
-                  <p class="fw-semibold mb-0">{{ month.totalWorkingDays }}</p>
+                  <p class="fw-semibold mb-0">26</p>
                 </div>
               </div>
               <div class="mt-2 small text-muted text-center">
