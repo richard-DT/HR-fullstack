@@ -60,6 +60,14 @@
               <td>₱{{ week.totalAdvances.toLocaleString() }}</td>
               <td class="fw-bold text-success">₱{{ week.netPay.toLocaleString() }}</td>
               <td>
+                <button
+                    class="btn btn-sm me-1"
+                    :class="week.isPublished ? 'btn-success' : 'btn-outline-secondary'"
+                    @click="handleTogglePublish(week)"
+                    v-if="authStore.isAdmin"
+                  >
+                    {{ week.isPublished ? '✅ Published' : '👁️ Publish' }}
+                </button>
                 <button class="btn btn-sm btn-outline-primary me-1" @click="openViewModal(week)">
                   👁️ View
                 </button>
@@ -114,6 +122,14 @@
               </div>
             </div>
             <div class="d-flex gap-2 mt-3">
+              <button
+                  v-if="authStore.isAdmin"
+                  class="btn btn-sm flex-grow-1"
+                  :class="week.isPublished ? 'btn-success' : 'btn-outline-secondary'"
+                  @click="handleTogglePublish(week)"
+                >
+                  {{ week.isPublished ? '✅ Published' : '👁️ Publish' }}
+              </button>
               <button class="btn btn-sm btn-outline-primary flex-grow-1" @click="openViewModal(week)">
                 👁️ View Details
               </button>
@@ -506,6 +522,14 @@ const openEditModal = (week) => {
   }
 
   addModal.show()
+}
+
+const handleTogglePublish = async (week) => {
+  try {
+    await attendanceStore.togglePublish(week._id)
+  } catch (err) {
+    alert(err.response?.data?.message || 'Error toggling publish status.')
+  }
 }
 
 onMounted(async () => {

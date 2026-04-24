@@ -50,19 +50,16 @@ export const useAttendanceStore = defineStore('attendance', () => {
     weeks.value = weeks.value.filter(w => w._id !== weekId)
   }
 
-  // async updateWeek(weekId, data) {
-  //   await api.put(`/attendance/${weekId}`, data)
-  //   await this.fetchWeeks(this.employeeId)
-  // }
-
-  // const fetchYTD = async (employeeId, year) => {
-  //   const res = await api.get(`/employees/${employeeId}/13thmonth/${year}`)
-  //   return res.data
-  // }
+  const togglePublish = async (weekId) => {
+    const res = await api.put(`/attendance/week/${weekId}/publish`)
+    const idx = weeks.value.findIndex(w => w._id === weekId)
+    if (idx !== -1) weeks.value[idx].isPublished = res.data.isPublished
+    return res.data
+  }
 
   return {
     weeks, week, loading, error,
     fetchWeeks, fetchWeek,
-    createWeek, updateWeek, deleteWeek
+    createWeek, updateWeek, deleteWeek, togglePublish
   }
 })
