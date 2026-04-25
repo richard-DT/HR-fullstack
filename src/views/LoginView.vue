@@ -92,24 +92,6 @@ const loading      = ref(false)
 const error        = ref(null)
 const showPassword = ref(false)
 
-// const handleLogin = async () => {
-//   error.value = null
-
-//   if (!form.value.username || !form.value.password) {
-//     error.value = 'Please enter username and password.'
-//     return
-//   }
-
-//   loading.value = true
-//   try {
-//     await authStore.login(form.value.username, form.value.password)
-//     router.push('/dashboard')
-//   } catch (err) {
-//     error.value = err.response?.data?.message || 'Login failed. Please try again.'
-//   } finally {
-//     loading.value = false
-//   }
-// }
 
 const handleLogin = async () => {
   error.value = null
@@ -137,8 +119,20 @@ const handleLogin = async () => {
 
   loading.value = true
   try {
+    // await authStore.login(form.value.username, form.value.password)
+    // router.push('/dashboard')
     await authStore.login(form.value.username, form.value.password)
-    router.push('/dashboard')
+
+    const user = authStore.user
+
+    // Admin or Bozzvics employee → dashboard
+    // Woodlands employee → their attendance page
+    if (authStore.isWoodlands && user?.employee) {
+      router.push(`/ytd/${user.employee._id}/2026`)
+    } else {
+      router.push('/dashboard')
+    }
+
   } catch (err) {
     error.value = err.response?.data?.message || 'Login failed. Please try again.'
   } finally {
