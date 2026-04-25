@@ -24,5 +24,14 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('user')
   }
 
-  return { user, token, isLoggedIn, isAdmin, login, logout }
+  const isWoodlands = computed(() =>
+  user.value?.username?.toLowerCase().endsWith('@woodlands') || false
+)
+  const appName = computed(() =>
+  user.value?.username?.toLowerCase().endsWith('@woodlands')
+    ? '💧 Woodlands HR'
+    : '🍜 Bozzvics HR'
+)
+
+  return { user, token, isLoggedIn, isAdmin, isWoodlands, appName, login, logout }
 })

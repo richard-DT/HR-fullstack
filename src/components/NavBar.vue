@@ -8,7 +8,8 @@
       >
         ☰
       </button>
-      <span class="navbar-brand fw-bold mb-0">🍜 Bozzvics HR</span>
+      <!-- <span class="navbar-brand fw-bold mb-0">🍜 Bozzvics HR</span> -->
+      <span class="navbar-brand fw-bold mb-0">{{ authStore.appName }}</span>
     </div>
     <div class="d-flex align-items-center gap-2">
       <span class="text-white-50 small d-none d-md-inline">

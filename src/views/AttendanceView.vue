@@ -16,20 +16,67 @@
     </div>
 
     <!-- Payslip Header Info -->
+    <!-- <div class="card shadow-sm mb-4" v-if="selectedEmployee">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <p class="mb-1"><span class="text-muted">Employee:</span> <strong>{ selectedEmployee.name }}</strong></p>
+            <p class="mb-1"><span class="text-muted">Hire Date:</span> { formatDate(selectedEmployee.hireDate) }}</p>
+            <p class="mb-1"><span class="text-muted">Daily Rate:</span> ₱{ selectedEmployee.dailyRate?.toFixed(2) }}</p>
+            <p class="mb-0"><span class="text-muted">4hrs OT Rate:</span> ₱{ selectedEmployee.otRate4hrs?.toFixed(2) }}</p>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-1"><span class="text-muted">Monthly Rate:</span> <strong>₱{ selectedEmployee.monthlyRate?.toLocaleString() }}</strong></p>
+            <p class="mb-1"><span class="text-muted">Monthly Restday Pay:</span> ₱{ selectedEmployee.monthlyRestdayPay?.toLocaleString() }}</p>
+            <p class="mb-1"><span class="text-muted">Variable Bonus:</span> ₱{ selectedEmployee.variableBonus?.toLocaleString() }}</p>
+            <p class="mb-0"><span class="text-muted">Gross Monthly Pay:</span> <strong class="text-success">₱{ selectedEmployee.grossMonthlyPay?.toLocaleString() }}</strong></p>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
     <div class="card shadow-sm mb-4" v-if="selectedEmployee">
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
-            <p class="mb-1"><span class="text-muted">Employee:</span> <strong>{{ selectedEmployee.name }}</strong></p>
-            <p class="mb-1"><span class="text-muted">Hire Date:</span> {{ formatDate(selectedEmployee.hireDate) }}</p>
-            <p class="mb-1"><span class="text-muted">Daily Rate:</span> ₱{{ selectedEmployee.dailyRate?.toFixed(2) }}</p>
-            <p class="mb-0"><span class="text-muted">4hrs OT Rate:</span> ₱{{ selectedEmployee.otRate4hrs?.toFixed(2) }}</p>
+            <p class="mb-1">
+              <span class="text-muted">Employee:</span>
+              <strong>{{ selectedEmployee.name }}</strong>
+            </p>
+            <p class="mb-1">
+              <span class="text-muted">Hire Date:</span>
+              {{ formatDate(selectedEmployee.hireDate) }}
+            </p>
+            <p class="mb-0">
+              <span class="text-muted">Daily Rate:</span>
+              ₱{{ selectedEmployee.dailyRate?.toFixed(2) }}
+            </p>
           </div>
-          <div class="col-md-6">
-            <p class="mb-1"><span class="text-muted">Monthly Rate:</span> <strong>₱{{ selectedEmployee.monthlyRate?.toLocaleString() }}</strong></p>
-            <p class="mb-1"><span class="text-muted">Monthly Restday Pay:</span> ₱{{ selectedEmployee.monthlyRestdayPay?.toLocaleString() }}</p>
-            <p class="mb-1"><span class="text-muted">Variable Bonus:</span> ₱{{ selectedEmployee.variableBonus?.toLocaleString() }}</p>
-            <p class="mb-0"><span class="text-muted">Gross Monthly Pay:</span> <strong class="text-success">₱{{ selectedEmployee.grossMonthlyPay?.toLocaleString() }}</strong></p>
+
+          <!-- Bozzvics only -->
+          <div class="col-md-6" v-if="!authStore.isWoodlands">
+            <p class="mb-1">
+              <span class="text-muted">Monthly Rate:</span>
+              <strong>₱{{ selectedEmployee.monthlyRate?.toLocaleString() }}</strong>
+            </p>
+            <p class="mb-1">
+              <span class="text-muted">4hrs OT Rate:</span>
+              ₱{{ selectedEmployee.otRate4hrs?.toFixed(2) }}
+            </p>
+            <p class="mb-1">
+              <span class="text-muted">Monthly Restday Pay:</span>
+              ₱{{ selectedEmployee.monthlyRestdayPay?.toLocaleString() }}
+            </p>
+            <p class="mb-1">
+              <span class="text-muted">Variable Bonus:</span>
+              ₱{{ selectedEmployee.variableBonus?.toLocaleString() }}
+            </p>
+            <p class="mb-0">
+              <span class="text-muted">Gross Monthly Pay:</span>
+              <strong class="text-success">
+                ₱{{ selectedEmployee.grossMonthlyPay?.toLocaleString() }}
+              </strong>
+            </p>
           </div>
         </div>
       </div>

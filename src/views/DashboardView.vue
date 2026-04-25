@@ -168,6 +168,8 @@
             </div>
           </div>
         </div>
+        <!-- Hide para sa Woodlands -->
+        <template v-if="!authStore.isWoodlands">
         <div class="col-6 col-md-3">
           <div class="card text-white bg-info h-100">
             <div class="card-body">
@@ -181,6 +183,7 @@
             </div>
           </div>
         </div>
+        </template>
       </div>
 
       <!-- KPI Table -->

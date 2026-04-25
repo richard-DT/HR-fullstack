@@ -417,24 +417,6 @@ const totalLoanBalance = computed(() =>
     .reduce((sum, l) => sum + (l.balance || 0), 0)
 )
 
-// const checkLoanLimit = () => {
-//   if (!selectedEmployee.value) return
-
-//   const monthlyPay = selectedEmployee.value.monthlyRate || 0
-
-//   if (totalLoanBalance.value > monthlyPay) {
-//     Swal.fire({
-//       icon: 'warning',
-//       title: 'Warning',
-//       text: 'You have exceeded the loan amount limit !!!',
-//       confirmButtonText: 'Noted',
-//       allowOutsideClick: false,
-//       allowEscapeKey: false,
-//       allowEnterKey: true
-//     })
-//   }
-// }
-
 let alertShown = false
 
 watch(
@@ -442,7 +424,7 @@ watch(
   ([balance, employee]) => {
     if (!employee || alertShown) return
 
-    const monthlyPay = employee.monthlyRate || 0
+    const monthlyPay = employee.monthlyRate || 10000
 
     if (balance > monthlyPay) {
       alertShown = true

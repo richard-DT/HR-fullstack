@@ -50,23 +50,26 @@
           📅 My Attendance
         </RouterLink>
 
-        <RouterLink
-          :to="`/13thmonth/${authStore.user.employee._id}/${currentYear}`"
-          class="sidebar-link"
-          :class="{ active: route.path.includes('/13thmonth') }"
-          @click="emit('closeSidebar')"
-        >
+        <!-- Bozzvics only — hide sa Woodlands -->
+          <template v-if="!authStore.isWoodlands">
+            <RouterLink
+              :to="`/13thmonth/${authStore.user.employee._id}/${currentYear}`"
+              class="sidebar-link"
+              :class="{ active: route.path.includes('/13thmonth') }"
+              @click="emit('closeSidebar')"
+            >
           🏆 Performance Bonus
         </RouterLink>
 
-        <RouterLink
-          :to="`/loans/${authStore.user.employee._id}`"
-          class="sidebar-link"
-          :class="{ active: route.path.includes('/loans') }"
-          @click="emit('closeSidebar')"
-        >
-          💰 My Loans
-        </RouterLink>
+            <RouterLink
+              :to="`/loans/${authStore.user.employee._id}`"
+              class="sidebar-link"
+              :class="{ active: route.path.includes('/loans') }"
+              @click="emit('closeSidebar')"
+            >
+              💰 My Loans
+            </RouterLink>
+          </template>
       </template>
     </nav>
 
